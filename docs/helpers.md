@@ -2,9 +2,11 @@
 
 docsify extends Markdown syntax to make your documents more readable.
 
-> Note: For the special code syntax cases, you'd better put them within a code backticks to avoid any conflicting from configurations or emojis.
+> Note: For the special code syntax cases, it's better to put them within code backticks to avoid any conflict from configurations or emojis.
 
-## Important content
+## Callouts
+
+### Important content
 
 Important content like:
 
@@ -16,7 +18,7 @@ is rendered as:
 
 !> **Time** is money, my friend!
 
-## General tips
+### Tips
 
 General tips like:
 
@@ -28,15 +30,23 @@ are rendered as:
 
 ?> _TODO_ unit test
 
-## Ignore to compile link
+## Link attributes
 
-Some time we will put some other relative path to the link, you have to need to tell docsify you don't need to compile this link. For example
+### disabled
+
+```md
+[link](/demo ':disabled')
+```
+
+### href
+
+Sometimes we will use some other relative path for the link, and we have to tell docsify that we don't need to compile this link. For example:
 
 ```md
 [link](/demo/)
 ```
 
-It will be compiled to `<a href="/#/demo/">link</a>` and will be loaded `/demo/README.md`. Maybe you want to jump to `/demo/index.html`.
+It will be compiled to `<a href="/#/demo/">link</a>` and will load `/demo/README.md`. Maybe you want to jump to `/demo/index.html`.
 
 Now you can do that
 
@@ -44,7 +54,7 @@ Now you can do that
 [link](/demo/ ':ignore')
 ```
 
-You will get `<a href="/demo/">link</a>`html. Do not worry, you can still set title for link.
+You will get `<a href="/demo/">link</a>`html. Do not worry, you can still set the title for the link.
 
 ```md
 [link](/demo/ ':ignore title')
@@ -52,28 +62,14 @@ You will get `<a href="/demo/">link</a>`html. Do not worry, you can still set ti
 <a href="/demo/" title="title">link</a>
 ```
 
-## Set target attribute for link
+### target
 
 ```md
 [link](/demo ':target=_blank')
 [link](/demo2 ':target=_self')
 ```
 
-## Disable link
-
-```md
-[link](/demo ':disabled')
-```
-
-## Cross-Origin link
-
-Only when you both set the `routerMode: 'history'` and `externalLinkTarget: '_self'`, you need add this configuration for those Cross-Origin links.
-
-```md
-[example.com](https://example.com/ ':crossorgin')
-```
-
-## Github Task Lists
+## Task lists
 
 ```md
 - [ ] foo
@@ -91,9 +87,21 @@ Only when you both set the `routerMode: 'history'` and `externalLinkTarget: '_se
   - [ ] bim
   - [ ] lim
 
-## Image
+## Images
 
-### Resizing
+### Class names
+
+```md
+![logo](https://docsify.js.org/_media/icon.svg ':class=someCssClass')
+```
+
+### IDs
+
+```md
+![logo](https://docsify.js.org/_media/icon.svg ':id=someCssId')
+```
+
+### Sizes
 
 ```md
 ![logo](https://docsify.js.org/_media/icon.svg ':size=WIDTHxHEIGHT')
@@ -109,25 +117,13 @@ Only when you both set the `routerMode: 'history'` and `externalLinkTarget: '_se
 ![logo](https://docsify.js.org/_media/icon.svg ':size=100')
 ![logo](https://docsify.js.org/_media/icon.svg ':size=10%')
 
-### Customise class
-
-```md
-![logo](https://docsify.js.org/_media/icon.svg ':class=someCssClass')
-```
-
-### Customise ID
-
-```md
-![logo](https://docsify.js.org/_media/icon.svg ':id=someCssId')
-```
-
-## Customise ID for headings
+## Heading IDs
 
 ```md
 ### Hello, world! :id=hello-world
 ```
 
-## Markdown in html tag
+## Markdown + HTML
 
 You need to insert a space between the html and markdown content.
 This is useful for rendering markdown content in the details element.
@@ -150,7 +146,7 @@ This is useful for rendering markdown content in the details element.
 
 </details>
 
-Or markdown content can be wrapped in html tag.
+Markdown content can also be wrapped in html tags.
 
 ```markdown
 <div style='color: red'>
@@ -164,7 +160,8 @@ Or markdown content can be wrapped in html tag.
 
 <div style='color: red'>
 
-- Abc
-- Abc
+- listitem
+- listitem
+- listitem
 
 </div>

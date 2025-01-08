@@ -1,47 +1,60 @@
-import { supportsPushState } from '../util/env';
-import * as dom from '../util/dom';
-import { noop } from '../util/core';
-import { HashHistory } from './history/hash';
-import { HTML5History } from './history/html5';
+import * as dom from '../util/dom.js';
+import { noop } from '../util/core.js';
+import { HashHistory } from './history/hash.js';
+import { HTML5History } from './history/html5.js';
 
-export function routerMixin(proto) {
-  proto.route = {};
-}
+/**
+ * @typedef {{
+ *   path?: string
+ * }} Route
+ */
 
+/** @type {Route} */
 let lastRoute = {};
 
-function updateRender(vm) {
-  vm.router.normalize();
-  vm.route = vm.router.parse();
-  dom.body.setAttribute('data-page', vm.route.file);
-}
+/** @typedef {import('../Docsify.js').Constructor} Constructor */
 
-export function initRouter(vm) {
-  const config = vm.config;
-  const mode = config.routerMode || 'hash';
-  let router;
+/**
+ * @template {!Constructor} T
+ * @param {T} Base - The class to extend
+ */
+export function Router(Base) {
+  return class Router extends Base {
+    route = {};
 
-  if (mode === 'history' && supportsPushState) {
-    router = new HTML5History(config);
-  } else {
-    router = new HashHistory(config);
-  }
-
-  vm.router = router;
-  updateRender(vm);
-  lastRoute = vm.route;
-
-  // eslint-disable-next-line no-unused-vars
-  router.onchange(params => {
-    updateRender(vm);
-    vm._updateRender();
-
-    if (lastRoute.path === vm.route.path) {
-      vm.$resetEvents(params.source);
-      return;
+    updateRender() {
+      this.router.normalize();
+      this.route = this.router.parse();
+      dom.body.setAttribute('data-page', this.route.file);
     }
 
-    vm.$fetch(noop, vm.$resetEvents.bind(vm, params.source));
-    lastRoute = vm.route;
-  });
+    initRouter() {
+      const config = this.config;
+      const mode = config.routerMode || 'hash';
+      let router;
+
+      if (mode === 'history') {
+        router = new HTML5History(config);
+      } else {
+        router = new HashHistory(config);
+      }
+
+      this.router = router;
+      this.updateRender();
+      lastRoute = this.route;
+
+      router.onchange(params => {
+        this.updateRender();
+        this._updateRender();
+
+        if (lastRoute.path === this.route.path) {
+          this.onNavigate(params.source);
+          return;
+        }
+
+        this.$fetch(noop, this.onNavigate.bind(this, params.source));
+        lastRoute = this.route;
+      });
+    }
+  };
 }
